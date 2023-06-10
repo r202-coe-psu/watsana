@@ -1,0 +1,89 @@
+{% extends '/admin/index.html' %}
+{% import '/base/html-renderer.html' as renderer %}
+
+{% block dashboard_title %}
+	{% if 'admin.classes.create' == request.endpoint %}
+		Create
+	{% elif 'admin.classes.edit' == request.endpoint %}
+		Edit
+	{% elif 'admin.classes.copy' == request.endpoint %}
+		Copy
+	{% endif %}
+	Classes
+{% endblock %}
+
+{% block breadcrumbs %}
+{% if class_ %}
+<div class="ui breadcrumb">
+  <a href="{{ url_for('admin.classes.index') }}" class="section">Classes</a>
+  <div class="divider"> / </div>
+  <a href="{{ url_for('admin.classes.view', class_id=class_.id) }}">{{ class_.name }}</a>
+  <div class="divider"> / </div>
+
+  {% if 'admin.classes.edit' == request.endpoint %}
+	<a href="{{ url_for('admin.classes.edit', class_id=class_.id) }}">Edit</a>
+  {% elif 'admin.classes.copy' == request.endpoint %}
+  	<a href="{{ url_for('admin.classes.copy', class_id=class_.id) }}">Copy</a>
+  {% endif %}
+</div>
+{% else %}
+<div class="ui breadcrumb">
+  <b>Create Classes</b>
+</div>
+{% endif %}
+{% endblock %}
+
+
+{% block content %}
+{% if class_ %}
+
+{{ renderer_navbar.render_class_navbar(class_, current_user) }}
+
+<h2 class="ui header">Edit Class</h2>
+<div class="ui divider"></div>
+{% endif %}
+
+<div class="row">
+  <div class="ui segment">
+    <form method="POST" class="ui form">
+      {{ form.csrf_token }}
+
+      <div class="three fields">
+          {{ renderer.render_field(form.student_id) }}
+          {{ renderer.render_select(form.curriculum) }}
+          {{ renderer.render_field(form.year) }}
+      </div>
+      <div class="three fields">
+        {{ renderer.render_field(form.title) }}
+        {{ renderer.render_field(form.first_name) }}
+        {{ renderer.render_field(form.last_name) }}
+      </div>
+
+
+
+      <button name="create" type="submit" class="ui button primary">
+        {{ 'Create' if 'create' in request.path else 'Edit'}}
+      </button>
+    </form>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block additional_js %}
+<script type="text/javascript">
+  datetime_formatter = {
+	datetime: 'DD-MM-YYYY'
+    };
+    $('#rangestart').calendar({
+        // type: 'date',
+        formatter: datetime_formatter,
+        endCalendar: $('#rangeend')
+    });
+    $('#rangeend').calendar({
+        // type: 'date',
+        formatter: datetime_formatter,
+        startCalendar: $('#rangestart')
+    });
+</script>
+{% endblock additional_js %}

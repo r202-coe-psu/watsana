@@ -1,0 +1,20 @@
+{% macro get_validate_class(errors) -%}
+{%- set class_str = '' -%}
+{% if errors | count > 0 -%}
+{% set class_str = 'error' %}
+{%- endif %}
+{{- class_str -}}
+{%- endmacro %}
+
+{% macro get_error_messages(errors) -%}
+	{% if errors %}
+    <div class="ui negative message">
+      <ul>
+        {% for error in errors %}
+          <li>{{ error }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+{%- endmacro %}
+

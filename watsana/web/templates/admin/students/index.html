@@ -1,0 +1,31 @@
+{% extends '/base/default-dashboard.html' %}
+
+{% block content %}
+<div class="ui segment middle algined" style="min-height: 80vh; padding-top: 10vh">
+  <div class="ui icon header center aligned">
+    <i class="icon university end"></i>
+    <h3>Hello, {{ current_user.first_name }} {{ current_user.last_name }} </h3>
+  </div>
+  <div class="left aligned">
+    <div class="ui list massive">
+      {% for student in students %}
+      <div class="item">
+        <div class="content">
+          <i class="users icon"></i> {{ student.get('_id')[0] }} 
+          <i class="calendar icon"></i> {{ student.get('_id')[1] }}
+          <i class="hourglass icon"></i> {{ student.get('count') }}
+          <i class="upload icon"></i> {{ student.get('brothers') }}
+          <a href="{{ url_for('admin.students.show_brother', curriculum=student.get('_id')[1], year=student.get('_id')[0]) }}" class="ui primary button">View</a>
+          <a href="{{ url_for('admin.students.group', curriculum=student.get('_id')[1], year=student.get('_id')[0]) }}" class="ui primary button">Group</a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <a href="{{ url_for('admin.students.import_student_from_file') }}" class="ui primary button">Import from file</a>
+    <a href="{{ url_for('admin.students.create_or_edit') }}" class="ui primary button">Create</a>
+  </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,73 @@
+{% import '/base/project-material-renderer.html' as pm_renderer %}
+
+
+{% macro render_project_section(projects, current_user, advisees, committees) -%}
+{%- if advisees | count > 0 or committees | count > 0 %}
+<div class="ui segment row">
+  {%- if advisees | count > 0 %}
+  <h4>Advisee Project</h4>
+  {{ render_project_table(advisees, current_user) }}
+  {%- endif %}
+  {%- if committees | count > 0 %}
+  <h4>Examination Project</h4>
+  {{ render_project_table(committees, current_user) }}
+  {%- endif %}
+</div>
+{%- endif %}
+{% endmacro -%}
+
+{% macro render_project_table(projects, current_user=None) -%}
+<table class="ui compact celled table">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Project</th>
+      <th>Student</th>
+      <th>Advisor</th>
+      <th>Public</th>
+      <th>Document</th>
+      {% if current_user.has_roles("admin") %}
+      <th>Action</th>
+      {% endif %}
+    </tr>
+  </thead>
+  <tbody>
+    {% for project in projects %}
+    <tr>
+      <td>{{ loop.index }}</td>
+      <td>{{ project.name }}</td>
+      <td class="right aligned collapsing">
+        {%- for s in project.students %}
+        <a target="_blank" href="{{ url_for('accounts.profile', user_id=s.id) }}">
+          {{ s.first_name }} {{ s.last_name }} ({{ s.username }})
+        </a>
+        {% if not loop.last %}<br>{% endif %}
+        {% endfor -%}
+      </td>
+      <td class="right aligned collapsing">{{ project.advisors|map(attribute='fullname')|join(', ') }}</td>
+      <td class="right aligned collapsing">{{ project.public.title() }}</td>
+      <td class="right aligned collapsing">
+        {{ pm_renderer.render_project_material(project) }}
+      </td>
+      {% if current_user.has_roles("admin") %}
+      <td class="right aligned collapsing">
+        <a class="ui negative icon button" href="{{ url_for('admin.projects.delete', project_id=project.id) }}">
+          <i class="trash icon"></i>
+        </a>
+      </td>
+      {% endif %}
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<script type="text/javascript">
+  $('.icon.link.pop')
+    .popup({
+      delay: {
+        show: 50,
+        hide: 70
+      }
+    });
+</script>
+{%- endmacro %}

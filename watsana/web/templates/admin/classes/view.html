@@ -1,0 +1,314 @@
+{% extends '/admin/classes/index.html' %}
+{% import '/base/error-handler.html' as eh %}
+{% import '/admin/classes/project-renderer.html' as renderer_project %}
+{% import '/navbar/class-navbar.html' as renderer_navbar %}
+{% import '/base/html-renderer.html' as renderer %}
+
+{% block breadcrumbs %}
+<div class="ui breadcrumb">
+	<a href="{{ url_for('admin.classes.index') }}" class="section">Classes</a>
+	<div class="divider"> / </div>
+	<a href="{{ url_for('admin.classes.view', class_id=class_.id) }}">{{ class_.name }}</a>
+</div>
+{% endblock %}
+
+
+{% block content %}
+
+
+{{ renderer_navbar.render_class_navbar(class_, current_user) }}
+
+<h2 class="ui header">
+	Classes
+</h2>
+<div class="ui divider"></div>
+
+<table class="ui single line table">
+	<tbody>
+		<tr>
+			<td>
+				<div style="color: grey">NAME </div>{{ class_.name }}
+			</td>
+			<td>
+				<div style="color: grey">DESCRIPTION</div> {{ class_.description }}
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<div style="color: grey">OWNER </div>{{ class_.owner.first_name }} {{ class_.owner.last_name }}
+			</td>
+			<td>
+				<div style="color: grey">CODE </div>{{ class_.code }}
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<div style="color: grey">TYPE</div> {{ class_.get_type_display() }}
+			</td>
+			<td>
+				<div style="color: grey">TAG</div> {{ class_.tags | join(', ') }}
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<div style="color: grey">STARTED DATE</div> {{ class_.started_date }}
+			</td>
+			<td>
+				<div style="color: grey">ENDED DATE</div> {{ class_.ended_date }}
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+{% if projects %}
+<div class="ui segment">
+	<h2 class="ui header">Final Report</h2>
+	{{ renderer_project.render_project_table(projects, current_user) }}
+</div>
+{% endif %}
+
+<div class="ui segment">
+	<h2 class="ui header">Submissions</h2>
+	<div class="ui divider"></div>
+	<h3 class="ui header">Meeting</h3>
+	<table class="ui selectable celled table">
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Round</th>
+				<th>Started Date</th>
+				<th>Ended Date</th>
+				<th>Extended Date</th>
+				<th>Edit/Delete</th>
+			</tr>
+		</thead>
+
+		<tbody>
+			{% for meeting in meetings %}
+			<tr class="top aligned">
+				<td>
+					<a href="{{url_for('meetings.view', meeting_id=meeting.id)}}">
+						{{ meeting.name }}
+					</a>
+				</td>
+				<td>
+					{{ meeting.get_round_display() }}
+				</td>
+				<td>
+					{{ meeting.started_date.strftime("%d %B %Y, %I:%M %p") }}
+				</td>
+				<td>
+					{{ meeting.ended_date.strftime("%d %B %Y, %I:%M %p") }}
+        </td>
+				<td>
+					{{ meeting.extended_date.strftime("%d %B %Y, %I:%M %p") }}
+				</td>
+				<td class="one wide single line right aligned">
+					<a class="ui primary icon button" href="{{url_for('meetings.edit', meeting_id=meeting.id)}}">
+						<i class="edit icon"></i>
+					</a>
+					<a class="ui red icon button" href="{{url_for('meetings.delete', meeting_id=meeting.id)}}">
+						<i class="trash icon"></i>
+					</a>
+				</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+	<div class="ui primary labeled icon button" onclick="showCreateMeeting()">
+		<i class="plus icon"></i>
+		Create Meeting
+	</div>
+	<p />
+	<div class="create meeting" style="display: none;">
+		<div class="ui segment">
+			<div class="ui left aligned horizontal divider">
+				Meeting Form
+			</div>
+			<br>
+			<form method="POST" class="ui form">
+				{{ form.csrf_token }}
+
+				<div class="fields">
+					{{ renderer.render_field(form.name) }}
+          {{ renderer.render_select(form.round) }}
+        </div>
+        <div class="fields">
+					{{ renderer.render_calendar(form.started_date, calendar_id="rangestart") }}
+					{{ renderer.render_calendar(form.ended_date, calendar_id="rangeend") }}
+					{{ renderer.render_calendar(form.extended_date, calendar_id="rangeextend") }}
+        </div>
+
+					<button name="create" type="submit" class="ui small primary button">
+						Create
+					</button>
+				<div class="ui horizontal right aligned divider">
+				</div>
+			</form>
+		</div>
+	</div>
+	<div class="ui divider"></div>
+
+	<h3 class="ui header">Report / Presentation</h3>
+	<table class="ui selectable celled table">
+		<thead>
+			<tr>
+				<th>Type</th>
+				<th>Round</th>
+				<th>Description</th>
+				<th>Started Date</th>
+				<th>Ended Date</th>
+				<th>Extended Date</th>
+				<th>Edit / Delete</th>
+			</tr>
+		</thead>
+
+		<body>
+			{% for submission in submissions %}
+			<tr class="top aligned">
+				<td>
+					<a href="{{ url_for('submissions.view', submission_id=submission.id)}}">
+						{{ submission.get_type_display() }}
+					</a>
+				</td>
+				<td>
+					{{ submission.get_round_display() }}
+				</td>
+				<td>
+					{{ submission.description}}
+				</td>
+				<td>{{ submission.natural_started_date() }}</td>
+				<td>{{ submission.natural_ended_date() }}</td>
+				<td>{{ submission.natural_extended_date() }}</td>
+				<td class="single line one wide right aligned">
+					<a class="ui primary icon button"
+						href="{{ url_for('submissions.edit', submission_id=submission.id) }}">
+						<i class="edit icon"></i>
+					</a>
+					<a class="ui red icon button"
+						href="{{ url_for('submissions.delete', submission_id=submission.id) }}">
+						<i class="trash icon"></i>
+					</a>
+				</td>
+			</tr>
+			{% endfor %}
+		</body>
+	</table>
+
+	<a class="ui primary labeled icon button" href="{{ url_for('submissions.create', class_id=class_.id) }}">
+		<i class="plus icon"></i>
+		Create Submission
+	</a>
+
+</div>
+
+<div class="ui divider"></div>
+<div class="ui segment">
+	<h2 class="ui header">Final Submission</h2>
+	{% if not final_submission %}
+<div class="ui info message">Final submission has not been set.</div>
+{% else %}
+<table class="ui definition table">
+	<tbody>
+		<tr>
+			<td>Started Date</td>
+			<td>{{ final_submission.natural_started_date() }}</td>
+		</tr>
+		<tr>
+			<td>Ended Date</td>
+			<td>{{ final_submission.natural_ended_date() }}</td>
+		</tr>
+		<tr>
+			<td>Extended Date</td>
+			<td>{{ final_submission.natural_extended_date() }}</td>
+		</tr>
+	</tbody>
+</table>
+{% endif %}
+{% if final_submission %}
+<a class="ui primary labeled icon button" href="{{ url_for('admin.classes.view_final_reports', class_id=class_.id) }}">
+	<i class="eye icon"></i>
+	View
+</a>
+<a class="ui teal labeled icon button" href="{{ url_for('admin.classes.edit_final_submission', class_id=class_.id, final_submission_id=final_submission.id) }}">
+	<i class="share alternate icon"></i>
+	 Edit Final Submission
+</a>
+{% else %}
+<a class="ui teal labeled icon button" href="{{ url_for('admin.classes.set_final_submission', class_id=class_.id) }}">
+	<i class="share alternate icon"></i>
+	 Set Final Submission
+</a>
+{% endif %}
+</div>
+
+
+
+<div class="ui modal delete class">
+	<i class="close icon"></i>
+	<div class="header">
+		Delete {{class_.name}} class
+	</div>
+	<div class="image content">
+		<div class="description">
+			<div class="ui small header">Are you sure you want to delete {{class_.name}} class?</div>
+		</div>
+	</div>
+	<div class="actions">
+		<div class="ui black deny button">
+			No
+		</div>
+		<a class="ui very small red icon button" style="margin-top:0.5em"
+			href="{{ url_for('admin.classes.delete', class_id=class_.id) }}">
+			<i class="trash icon"></i> Delete Class
+		</a>
+	</div>
+</div>
+
+{% endblock %}
+
+{% block additional_js %}
+<script>
+	function showDelete() {
+		$('.ui.modal.delete.class')
+			.modal('show')
+			;
+	}
+	function showCreateMeeting() {
+		$(".create.meeting").transition('fade down')
+			;
+	}
+
+</script>
+<script src=" {{ url_for('static', filename='node_modules/fomantic-ui-css/components/calendar.js') }}"></script>
+<script type="text/javascript">
+	datetime_formatter = {
+		datetime: function (datetime, settings) {
+			if (!datetime) return '';
+			var day = datetime.getDate();
+			var month = datetime.getMonth() + 1;
+			var year = datetime.getFullYear();
+			var hour = datetime.getHours();
+			var minute = datetime.getMinutes();
+			return year + '-' + ("0" + month).slice(-2) + '-' + ("0" + day).slice(-2) + " " + ("0" + hour).slice(-2) + ":" + ("0" + minute).slice(-2);
+		}
+	};
+	$('#rangestart').calendar({
+		// type: 'date',
+		formatter: datetime_formatter,
+		endCalendar: $('#rangeend')
+	});
+	$('#rangeend').calendar({
+		// type: 'date',
+		formatter: datetime_formatter,
+		startCalendar: $('#rangestart'),
+		endCalendar: $('#rangeextend')
+  });
+	$('#rangeextend').calendar({
+		// type: 'date',
+		formatter: datetime_formatter,
+		startCalendar: $('#rangeend'),
+	});
+
+</script>
+{% endblock additional_js %}

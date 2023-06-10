@@ -1,0 +1,61 @@
+{% extends '/accounts/index.html' %}
+{% import '/base/error-handler.html' as eh %}
+{% import '/base/html-renderer.html' as renderer %}
+
+{% block title %}
+{{ current_user.title }} {{ current_user.first_name }} {{ current_user.last_name }}
+{% endblock %}
+
+{% block breadcrumbs %}
+{{ super() }}
+<i class="right angle icon divider"></i>
+<div class="active section">Edit Profile</div>
+{% endblock %}
+
+{% block content %}
+<div class="ui content">
+  <div class="ui segment">
+    <h2>Profile</h2>
+    <form method="POST" class="ui form" enctype="multipart/form-data">
+      {{ form.csrf_token }}
+      <div class="three fields">
+        {{ renderer.render_field(form.title) }}
+        {{ renderer.render_field(form.first_name) }}
+        {{ renderer.render_field(form.last_name) }}
+      </div>
+      <div class="three fields">
+        {{ renderer.render_field(form.title_th) }}
+        {{ renderer.render_field(form.first_name_th) }}
+        {{ renderer.render_field(form.last_name_th) }}
+      </div>
+      <div class="two fields">
+        {{ renderer.render_field(form.email) }}
+        {{ renderer.render_fileinput(form.pic) }}
+      </div>
+      {{ renderer.render_field(form.biography) }}
+      <button name="create" type="submit" class="ui primary button">Change</button>
+    </form>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col s12">
+  </div>
+</div>
+
+{% endblock content %}
+
+{% block additional_js %}
+<script type="text/javascript">
+  $(".attach-file-pic").click(function () {
+    $(this).parent().find("#pic").click();
+  });
+
+  $('#pic')
+    .on('change', function (e) {
+      var name = e.target.files[0].name;
+      $('.attach-file-pic', $(e.target).parent()).val(name);
+    });
+</script>
+
+{% endblock additional_js %}

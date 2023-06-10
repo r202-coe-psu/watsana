@@ -1,0 +1,41 @@
+version: '3'
+services:
+    mongodb:
+        image: mongo
+        container_name: daw-mongodb
+        volumes:
+            - ../deployment/daw/mongodb/data/db:/data/db
+            - /etc/localtime:/etc/localtime:ro
+        restart: always
+        networks:
+            - default
+        logging:
+            options:
+                max-size: "10m"
+                max-file: "3"
+    web:
+        build: .
+        image: daw-image
+        container_name: daw-web
+        volumes:
+            - ../deployment:/deployment
+            - /etc/localtime:/etc/localtime:ro
+        ports:
+            - 9000:9000
+        links:
+            - mongodb
+        networks:
+            - default
+        restart: always
+        environment:
+            DAW_SETTINGS: /app/daw-production.cfg
+        command:
+            uwsgi --lazy-apps --ini scripts/daw-uwsgi.ini
+        logging:
+            options:
+                max-size: "10m"
+                max-file: "3"
+    
+
+networks:
+    default:

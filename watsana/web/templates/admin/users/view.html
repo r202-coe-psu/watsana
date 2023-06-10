@@ -1,0 +1,45 @@
+{% extends '/admin/users/index.html' %}
+{% import '/base/error-handler.html' as eh %}
+{% import '/base/html-renderer.html' as renderer %}
+
+{% block title %}
+Edit User
+{% endblock %}
+
+{% block breadcrumbs %}
+<div class="ui breadcrumb">
+    {{ super() }}
+    <i class="right angle icon divider"></i>
+    <div class="section">Edit User</div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="ui content">
+    <div class="ui segment">
+        <h2>Profile</h2>
+        <form method="POST" class="ui form">
+            {{ form.hidden_tag() }}
+
+            {{ renderer.render_field(form.username)}}
+
+            <div class="three fields">
+                {{ renderer.render_field(form.title) }}
+                {{ renderer.render_field(form.first_name) }}
+                {{ renderer.render_field(form.last_name) }}
+            </div>
+            <div class="three fields">
+                {{ renderer.render_field(form.title_th) }}
+                {{ renderer.render_field(form.first_name_th) }}
+                {{ renderer.render_field(form.last_name_th) }}
+            </div>
+            <div class="three fields">
+                {{ renderer.render_field(form.email) }}
+            </div>
+            {{ renderer.render_field(form.roles) }}
+            <button name="create" type="submit" class="ui primary button">Change</button>
+        </form>
+    </div>
+</div>
+
+{% endblock content %}

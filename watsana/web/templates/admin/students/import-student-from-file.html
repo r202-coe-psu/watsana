@@ -1,0 +1,36 @@
+{% extends '/base/default-dashboard.html' %}
+{% import '/base/html-renderer.html' as renderer %}
+
+
+{% block dashboard_title %}
+    Add Student From File
+{% endblock %}
+
+{% block breadcrumbs %}
+  {{ super() }}
+  <i class="right angle icon divider"></i>
+  <div class="active section">Add Student From File</div>
+
+{% endblock %}
+
+{% block content %}
+<div class="ui container">
+  <div class="ui segment">
+    <form method="POST" class="ui form" id="student_form" enctype="multipart/form-data">
+      {{ form.csrf_token }}
+      {{ renderer.render_fileinput(form.student_file) }}
+      <button class="ui button primary" type="submit" >Add</button>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block additional_js %}
+<script type="text/javascript">
+  $('.ui.dropdown')
+  .dropdown();
+  $(".attach-file-student_file").click(function() {
+    $(this).parent().find("#student_file").click();
+  });
+  </script>
+{% endblock %}

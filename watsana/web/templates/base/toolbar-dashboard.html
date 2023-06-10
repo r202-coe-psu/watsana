@@ -1,0 +1,26 @@
+<div class="item">
+  <a href="{{ url_for('accounts.index') }}" class="ui image">
+    {% if current_user.get_picture() %}
+    <img class="ui avatar image" src="{{ current_user.get_picture() }}">
+    {% else %}
+    <i class="user icon"></i>
+    {% endif %}
+  </a>
+  <a href="{{ url_for('accounts.index') }}">
+      <span class="white-text name">{{ current_user.first_name }} {{ current_user.last_name }}</span>
+  </a><br />
+  <a href="{{ url_for('accounts.index') }}">
+    <span class="white-text email">{{ current_user.email }}</span>
+  </a>
+</div>
+
+<a class="item" href="{{ url_for('dashboard.index') }}"><i class="icon dashboard"></i>Dashboard</a>
+<a class="item" href="{{ url_for('sites.index') }}"><i class="icon world"></i>Home Page</a>
+
+
+{% if current_user.has_roles('admin') %}
+<a class="item" href="{{ url_for('admin.index') }}"><i class="icon users"></i>Admin</a>
+{% endif %}
+
+<a class="item" href="{{ url_for('accounts.index') }}"><i class="address book icon"></i>Account</a>
+<a class="item" href="{{ url_for('accounts.logout') }}"><i class="sign out icon"></i>Logout</a>

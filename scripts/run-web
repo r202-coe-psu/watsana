@@ -1,0 +1,3 @@
+#!/bin/sh
+
+FLASK_DEBUG=true WATSANA_SETTINGS=$(pwd)/watsana-development.cfg DEBUG=1 watsana-web -H 0.0.0.0 -d

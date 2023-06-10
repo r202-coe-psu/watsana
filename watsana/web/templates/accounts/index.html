@@ -1,0 +1,159 @@
+{% if current_user.is_authenticated %}
+{% extends '/base/default-dashboard.html' %}
+{% else %}
+{% extends '/base/default-page.html' %}
+{% endif %}
+
+{% block dashboard_title %}
+Profile
+{% endblock %}
+
+{% block breadcrumbs %}
+<a href="{{ url_for('accounts.index') }}" class="section">Accounts</a>
+{% endblock %}
+
+{% block title %}
+{{ user.title }} {{ user.first_name }} {{ user.last_name }}
+{% endblock %}
+
+{% block content %}
+<div class="ui container"> {# start div container #}
+  <div class="ui segment">
+    <h2 class="ui header">Profile
+      {% if current_user.is_authenticated and current_user.id == user.id %}
+      <a class="btn-floating btn-large waves-effect waves-light" href="{{ url_for('accounts.edit_profile') }}"
+        title='Edit profile.'><i class="edit icon"></i></a>
+      {% endif %}
+    </h2>
+    <div class="ui grid">
+
+      <div class="four wide column center aligned">
+        <div class="ui small image">
+          <img src="{{ user.get_picture() }}">
+        </div>
+      </div>
+
+      <div class="twelve wide column">
+        <div>
+          <h3 class="ui header">{{ user.title }} {{ user.first_name }} {{ user.last_name }}</h3>
+          <h3 class="ui header">{{ user.title_th }} {{ user.first_name_th }} {{ user.last_name_th }}</h3>
+          <div class="ui label large">
+            <i class="mail icon"></i>
+            {{ user.email }}
+          </div>
+          <div style="margin-top: .5vh;">
+            {% if current_user.is_authenticated and current_user.id == user.id %}
+            Role:
+            {% for role in user.roles %}
+            <div class="ui label">
+              {{ role }}
+            </div>
+            {% endfor %}
+            {% endif %}
+          </div>
+        </div>
+        <div style="margin-top: 2vh;">
+          <h4>Biography</h4>
+          {{ biography | safe }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% set project = user.get_project() %}
+  {% if project %}
+  <div class="ui segment">
+    <h3>{{ project.name_th }}</h3>
+    <h3>{{ project.name }}</h3>
+    <div>
+      {% for t in project.tags %}
+      <a class="ui label" href="{{ url_for('tags.view', name=t) }}">{{ t }}</a>
+      {% endfor %}
+    </div>
+    <div class="ui message text large">
+      <div class="header">Advisors</div>
+      {% for advisor in project.advisors %}
+      <a target="_blank" href="{{ url_for('accounts.profile', user_id=advisor.id) }}">
+        {{ advisor.title }} {{ advisor.first_name }} {{ advisor.last_name }}
+      </a><br>
+    {% endfor %}
+    </div>
+    {% if 'abstract' in project.public %}
+    <div class="ui message text large">
+      <div class="header">Abstract</div>
+      <p>{{ project.abstract_th }}</p>
+      <p>{{ project.abstract }}</p>
+    </div>
+    {% endif %}
+
+    {% if project.public not in ['only name', 'private', 'abstract'] %}
+    <div class="ui message text large">
+      <div class="header">Public</div>
+      <p>
+        {% for type_, icon in [('report', 'pdf file'), ('poster', 'image file'), ('presentation', 'powerpoint file'),
+        ('video', 'video file'), ('git', 'git')] %}
+          {% if type_ in project.public %}
+            {% set r = project.get_resource(type_) %}
+            {% if r %}
+            <a target="_blank" href="{{ r.link }}"><i class="big {{ icon }} icon link pop" data-content="{{ type_.title() }}"></i></a>
+            {% endif %}
+          {% endif %}
+        {% endfor %}
+      </p>
+    </div>
+    {% endif %}
+
+    {% if current_user.is_authenticated and current_user.has_roles('lecturer') %}
+    <div class="ui message text large">
+      <div class="header">Special for Lecturer</div>
+      <p>
+        {% for type_, icon in [('report', 'pdf file'), ('poster', 'image file'), ('presentation', 'powerpoint file'),
+        ('video', 'video file'), ('git', 'git')] %}
+            {% set r = project.get_resource(type_) %}
+            {% if r %}
+              <a target="_blank" href="{{ r.link }}"><i class="big {{ icon }} icon link pop" data-content="{{ type_.title() }}"></i></a>
+            {% endif %}
+        {% endfor %}
+      </p>
+    </div>
+    {% endif %}
+
+
+
+    {% endif %}
+
+    {% if 'lecturer' in user.roles %}
+    <div class="ui segment">
+      <table class="ui table large text">
+        <tbody>
+          {% for project in user.get_advisee_projects() if project.public != 'private' %}
+          <tr>
+            <td data-label="Title">{{ project.name }}<br>{{ project.name_th }}</td>
+            <td data-label="Student">
+              {% for s in project.students %}
+              <a target="_blank" href="{{ url_for('accounts.profile', user_id=s.id) }}">
+                {{ s.first_name }} {{ s.last_name }}
+              </a>
+              {% if not loop.last %}, {% endif %}
+              {% endfor %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% endif %}
+
+  </div> {# end div container #}
+{% endblock %}
+
+{% block additional_js %}
+  {{ super() }}
+  <script type="text/javascript">
+    $().ready(function(){
+      $('.icon.link.pop')
+        .popup()
+        ;
+    });
+  </script>
+{% endblock %}

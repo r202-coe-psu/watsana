@@ -1,0 +1,55 @@
+{% extends '/base/default-dashboard.html' %}
+
+{% block dashboard_title %}
+Classes
+{% endblock %}
+
+{% block breadcrumbs %}
+<div class="ui breadcrumb">
+	<a href="{{ url_for('admin.classes.index') }}" class="section">Classes</a>
+</div>
+{% endblock %}
+
+{% block content %}
+
+<h1 class="ui horizontal divider header">
+	<i class="small icon chalkboard end"></i>
+	All Classes
+</h1>
+
+<div class="ui segment">
+	{% if classes %}
+	<table class="ui celled table unstackable">
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Description</th>
+				<th>Operation</th>
+			</tr>
+		</thead>
+
+		<body>
+			{% for class_ in classes %}
+			<tr>
+				<td>
+					<a href="{{ url_for('admin.classes.view', class_id=class_.id) }}">{{ class_.name }}</a>
+				</td>
+				<td>
+					{{ class_.description }}
+        </td>
+        <td>
+          <a href="{{ url_for('admin.classes.copy', class_id=class_.id) }}" class="ui icon primary circular button"><i class="copy icon"></i></a>
+        </td>
+			</tr>
+			{% endfor %}
+		</body>
+	</table>
+	{% endif %}
+
+	<a class="ui primary icon button" href="{{ url_for('admin.classes.create') }}">
+		Create Class
+	</a>
+</div>
+
+
+{% endblock %}

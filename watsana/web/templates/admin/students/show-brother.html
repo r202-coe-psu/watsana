@@ -1,0 +1,36 @@
+{% extends '/base/default-dashboard.html' %}
+
+{% block content %}
+<div class="ui segment" style="min-height: 80vh; padding-top: 10vh">
+  <div class="ui icon header center aligned">
+    <i class="icon university end"></i>
+    <h3>{{ curriculum }} -> {{ year }} </h3>
+  </div>
+  <div>
+
+    <table class="ui celled table">
+      <thead>
+        <tr>
+          <th>Student</th>
+          <th>Brother</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for student in students %}
+        <tr>
+          <td data-label="Student">{{ student.student_id}} {{ student.get_fullname() }}</td>
+          <td data-label="Brother">
+            {% if student.brother %}
+              {{ student.brother.student_id}} {{ student.brother.get_fullname() }}
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+  </div>
+
+</div>
+
+{% endblock %}

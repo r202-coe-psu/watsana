@@ -1,0 +1,62 @@
+
+{% macro render_project_material(project) -%}
+  {% set r = project.get_resource('report') %}
+  {% if r %}
+    <a target="_blank" href="{{ r.link }}"><i class="large pdf file icon link pop" data-content="Report"></i></a>
+  {% else %}
+    <i class="large pdf file icon disabled"></i>
+  {% endif %}
+
+  {% set r = project.get_resource('similarity') %}
+  {% if r %}
+    <a target="_blank" href="{{ r.link }}"><i class="large copy icon link pop" data-content="Similarity"></i></a>
+  {% else %}
+    <i class="large copy icon disabled"></i>
+  {% endif %}
+
+  {% set r = project.get_resource('poster') %}
+  {% if r %}
+    <a target="_blank" href="{{ r.link }}"><i class="large file image icon link pop" data-content="Poster"></i></a>
+  {% else %}
+    <i class="large file image icon disabled"></i>
+  {% endif %}
+
+  {% set r = project.get_resource('presentation') %}
+  {% if r %}
+    <a target="_blank" href="{{ r.link }}"><i class="large file powerpoint icon link pop" data-content="Presentation"></i></a>
+  {% else %}
+    <i class="large file powerpoint icon disabled"></i>
+  {% endif %}
+
+  {% set r = project.get_resource('other') %}
+  {% if r %}
+    <a target="_blank" href="{{ r.link }}"><i class="large archive icon link pop" data-content="Other Resorces"></i></a>
+  {% else %}
+    <i class="large archive icon disabled"></i>
+  {% endif %}
+
+  {% set r = project.get_resource('video') %}
+  {% if r %}
+    <a target="_blank" href="{{ r.link }}"><i class="large video file icon link pop" data-content="Video"></i></a>
+  {% else %}
+    <i class="large video file icon disabled"></i>
+  {% endif %}
+
+  {% set r = project.get_resource('git') %}
+  {% if r %}
+    <a target="_blank" href="{{ r.link }}"><i class="large git icon link pop" data-content="Git Repository"></i></a>
+  {% else %}
+    <i class="large git icon disabled"></i>
+  {% endif %}
+
+  <script type="text/javascript">
+  $('.icon.link.pop')
+  .popup({
+    delay: {
+    show: 50,
+    hide: 70
+    }
+  });
+  </script>
+{%- endmacro %}
+
