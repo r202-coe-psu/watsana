@@ -3,6 +3,7 @@ from flask_login import login_required, current_user
 
 from watsana import models
 from .. import forms
+from .admin import students
 
 import datetime
 
@@ -10,20 +11,20 @@ module = Blueprint("dashboard", __name__, url_prefix="/dashboard")
 
 
 def index_student():
-    projects = models.Project.objects(students=current_user._get_current_object())
+    students = []
 
-    classes = models.Class.objects.all()
-    available_class = []
-    user = current_user._get_current_object()
+    student = models.Student.objects(student_id=student_id).first()
+    if student:
+        students.append(student)
+        brothers = []
 
-    for class_ in classes:
-        if class_.is_in_time() and user.username in class_.student_ids:
-            available_class.append(class_)
+        get_brothers(student, brothers)
+        get_little_brothers(student, brothers)
+        students.extend(brothers)
 
     return render_template(
         "/dashboard/index-student.html",
-        projects=projects,
-        available_class=available_class,
+        students=students,
     )
 
 

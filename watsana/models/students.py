@@ -21,7 +21,7 @@ class Student(me.Document):
         required=True, default=datetime.datetime.now, auto_now=True
     )
 
-    brother = me.ReferenceField("Student", dbref=True)
+    brothers = me.ListField(me.ReferenceField("Student", dbref=True))
 
     meta = {
         "collection": "students",
@@ -48,5 +48,5 @@ class Student(me.Document):
             return self.resources["google"].get("picture", "")
         return url_for("static", filename="images/user.png")
 
-    def get_next_brother(self):
-        return Student.objects(brother=self).first()
+    def get_little_brothers(self):
+        return Student.objects(brothers=self)

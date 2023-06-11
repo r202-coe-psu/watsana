@@ -8,7 +8,7 @@
   </div>
   <div class="left aligned">
     <div class="ui list massive">
-      {% for student in students %}
+      {% for student in students|sort(attribute="_id") %}
       <div class="item">
         <div class="content">
           <i class="users icon"></i> {{ student.get('_id')[0] }} 
@@ -17,6 +17,7 @@
           <i class="upload icon"></i> {{ student.get('brothers') }}
           <a href="{{ url_for('admin.students.show_brother', curriculum=student.get('_id')[1], year=student.get('_id')[0]) }}" class="ui primary button">View</a>
           <a href="{{ url_for('admin.students.group', curriculum=student.get('_id')[1], year=student.get('_id')[0]) }}" class="ui primary button">Group</a>
+          <a href="{{ url_for('admin.students.group', curriculum=student.get('_id')[1], year=student.get('_id')[0], final='true') }}" class="ui negative button">Group Final</a>
         </div>
       </div>
       {% endfor %}

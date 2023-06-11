@@ -11,18 +11,33 @@
     <table class="ui celled table">
       <thead>
         <tr>
+          <th></th>
           <th>Student</th>
           <th>Brother</th>
+          <th>Little Brother</th>
         </tr>
       </thead>
       <tbody>
         {% for student in students %}
-        <tr>
-          <td data-label="Student">{{ student.student_id}} {{ student.get_fullname() }}</td>
+          <tr>
+          <td>{{ loop.index }}</td>
+          <td data-label="Student">
+            {{ student.student_id}} {{ student.get_fullname() }}
+            <a href="{{ url_for('admin.students.create_or_edit', student_id=student.id) }}"><i class="edit icon"></i></a>
+          </td>
           <td data-label="Brother">
-            {% if student.brother %}
-              {{ student.brother.student_id}} {{ student.brother.get_fullname() }}
-            {% endif %}
+            {% for brother in student.brothers %}
+              {{ brother.student_id}} {{ brother.get_fullname() }}
+              <a href="{{ url_for('admin.students.create_or_edit', student_id=brother.id) }}"><i class="edit icon"></i></a>
+              <br/>
+            {% endfor %}
+          </td>
+          <td>
+            {% for brother in student.get_little_brothers() %}
+              {{ brother.student_id}} {{ brother.get_fullname() }}
+              <a href="{{ url_for('admin.students.create_or_edit', student_id=brother.id) }}"><i class="edit icon"></i></a>
+              <br/>
+            {% endfor %}
           </td>
         </tr>
         {% endfor %}

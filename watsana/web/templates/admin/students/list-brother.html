@@ -1,0 +1,30 @@
+{% extends '/base/default-dashboard.html' %}
+
+{% block dashboard_title %}
+Dashboard
+{% endblock %}
+
+{% block breadcrumbs %}
+{% endblock %}
+
+
+{% block content %}
+
+  <h2 class="ui header horizontal divider">Brotherhood</h2>
+  <div class="ui relaxed list">
+    {% for student in students %}
+    <div class="item">
+      {#
+      <img class="ui avatar image" src="/images/avatar/small/daniel.jpg">
+      #}
+      <div class="content">
+        <a class="header">{{ student.curriculum }} {{ student.year }}</a>
+        <div class="description">
+          {{ student.student_id }} {{ student.get_fullname() }}
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+{% endblock %}
