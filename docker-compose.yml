@@ -2,9 +2,9 @@ version: '3'
 services:
     mongodb:
         image: mongo
-        container_name: daw-mongodb
+        container_name: watsana-mongodb
         volumes:
-            - ../deployment/daw/mongodb/data/db:/data/db
+            - ../deployment/watsana/mongodb/data/db:/data/db
             - /etc/localtime:/etc/localtime:ro
         restart: always
         networks:
@@ -15,8 +15,8 @@ services:
                 max-file: "3"
     web:
         build: .
-        image: daw-image
-        container_name: daw-web
+        image: watsana-image
+        container_name: watsana-web
         volumes:
             - ../deployment:/deployment
             - /etc/localtime:/etc/localtime:ro
@@ -28,9 +28,9 @@ services:
             - default
         restart: always
         environment:
-            DAW_SETTINGS: /app/daw-production.cfg
+            WATSANA_SETTINGS: /app/watsana-production.cfg
         command:
-            /venv/bin/gunicorn -w 2 --bind 0.0.0.0:9280 "watsana.web:create_app()"
+            /venv/bin/gunicorn -w 2 --bind 0.0.0.0:9280 --env "SCRIPT_NAME=/watsana" --log-file=- --log-level debug --capture-output "watsana.web:create_app()"
         logging:
             options:
                 max-size: "10m"
