@@ -21,7 +21,7 @@ services:
             - ../deployment:/deployment
             - /etc/localtime:/etc/localtime:ro
         ports:
-            - 9000:9000
+            - 9280:9280
         links:
             - mongodb
         networks:
