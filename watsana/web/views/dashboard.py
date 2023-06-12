@@ -18,8 +18,8 @@ def index_student():
         students.append(student)
         brothers = []
 
-        stuents_view.get_brothers(student, brothers)
-        student_view.get_little_brothers(student, brothers)
+        students_view.get_brothers(student, brothers)
+        students_view.get_little_brothers(student, brothers)
         students.extend(brothers)
 
     return render_template(
