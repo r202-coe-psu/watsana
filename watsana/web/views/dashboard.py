@@ -13,7 +13,7 @@ module = Blueprint("dashboard", __name__, url_prefix="/dashboard")
 def index_student():
     students = []
 
-    student = models.Student.objects(student_id=student_id).first()
+    student = models.Student.objects(student_id=current_user.username).first()
     if student:
         students.append(student)
         brothers = []
