@@ -3,7 +3,7 @@ from flask_login import login_required, current_user
 
 from watsana import models
 from .. import forms
-from .admin import students
+from .admin import students as students_view
 
 import datetime
 
@@ -18,8 +18,8 @@ def index_student():
         students.append(student)
         brothers = []
 
-        get_brothers(student, brothers)
-        get_little_brothers(student, brothers)
+        stuents_view.get_brothers(student, brothers)
+        student_view.get_little_brothers(student, brothers)
         students.extend(brothers)
 
     return render_template(
