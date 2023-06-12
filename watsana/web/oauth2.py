@@ -82,19 +82,19 @@ def create_user_psu(user_info):
     else:
         user.roles.append("staff")
 
-    if user_info.get("office_name"):
-        organization_name = user_info.get("office_name").split(" ")[-1].strip()
-        organization = models.Organization.objects(name=organization_name).first()
-        if organization and organization not in user.organizations:
-            # user.organizations.append(organization)
-            organization_user_role = models.OrganizationUerRole(
-                organization=organization,
-                user=user,
-            )
-            organization_user_role.save()
+    # if user_info.get("office_name"):
+    #     organization_name = user_info.get("office_name").split(" ")[-1].strip()
+    #     organization = models.Organization.objects(name=organization_name).first()
+    #     if organization and organization not in user.organizations:
+    #         # user.organizations.append(organization)
+    #         organization_user_role = models.OrganizationUerRole(
+    #             organization=organization,
+    #             user=user,
+    #         )
+    #         organization_user_role.save()
 
-        if not user.user_setting.current_organization:
-            user.user_setting.current_organization = organization
+    #     if not user.user_setting.current_organization:
+    #         user.user_setting.current_organization = organization
 
     if user_info.get("full_name_th"):
         name_th = user_info.get("full_name_th").split(" ")
@@ -103,7 +103,7 @@ def create_user_psu(user_info):
 
     user.title_th = user_info.get("title_th")
     user.title = user_info.get("title")
-    user.other_ids.append(user_info.get("username"))
+    # user.other_ids.append(user_info.get("username"))
 
     user.save()
     return user
