@@ -26,11 +26,11 @@
           <div class="column header" style="text-align: left;">
             <h3>For PSU Engineering Faculty Member</h3>
           </div>
-        </div>
+    >
         <div class="row" style="padding-top: 5px;">
-          <a class="ui labeled icon button primary huge" href="{{ url_for('accounts.login_engpsu') }}">
+          <a class="ui labeled icon button primary huge" href="{{ url_for('accounts.login_oauth', name='psu') }}">
             <i class="user icon"></i>
-            PSU Passport by Eng
+            PSU Passport
           </a>
         </div>
         {% if 'GOOGLE' in config.LOGIN_PROVIDER %}
