@@ -30,7 +30,7 @@ services:
         environment:
             DAW_SETTINGS: /app/daw-production.cfg
         command:
-            uwsgi --lazy-apps --ini scripts/daw-uwsgi.ini
+            /venv/bin/gunicorn -w 2 --bind 0.0.0.0:9280 "watsana.web:create_app()"
         logging:
             options:
                 max-size: "10m"
