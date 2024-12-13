@@ -5,15 +5,16 @@ description = ""
 authors = ["R202"]
 
 [tool.poetry.dependencies]
-python = "^3.11"
-Flask = "=2.2.5"
+python = "^3.12"
+Flask = "2.2.5"
 flask-mongoengine = "^1.0.0"
-Werkzeug = "^2.0.1"
-Flask-Login = "^0.6.2"
-pillow = "^9.5.0"
-authlib = "^1.2.0"
-pandas = "^2.0.2"
+Werkzeug = "3.1.3"
+Flask-Login = "0.6.3"
+pillow = "11.0.0"
+authlib = "1.3.2"
+pandas = "2.2.3"
 odfpy = "^1.4.1"
+requests = "^2.32.3"
 
 [tool.poetry.dev-dependencies]
 watchdog = "^2.1.3"
