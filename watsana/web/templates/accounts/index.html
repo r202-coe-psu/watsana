@@ -60,7 +60,6 @@ Profile
     </div>
   </div>
 
-  {% set project = user.get_project() %}
   {% if project %}
   <div class="ui segment">
     <h3>{{ project.name_th }}</h3>
@@ -76,7 +75,7 @@ Profile
       <a target="_blank" href="{{ url_for('accounts.profile', user_id=advisor.id) }}">
         {{ advisor.title }} {{ advisor.first_name }} {{ advisor.last_name }}
       </a><br>
-    {% endfor %}
+      {% endfor %}
     </div>
     {% if 'abstract' in project.public %}
     <div class="ui message text large">
@@ -92,12 +91,13 @@ Profile
       <p>
         {% for type_, icon in [('report', 'pdf file'), ('poster', 'image file'), ('presentation', 'powerpoint file'),
         ('video', 'video file'), ('git', 'git')] %}
-          {% if type_ in project.public %}
-            {% set r = project.get_resource(type_) %}
-            {% if r %}
-            <a target="_blank" href="{{ r.link }}"><i class="big {{ icon }} icon link pop" data-content="{{ type_.title() }}"></i></a>
-            {% endif %}
-          {% endif %}
+        {% if type_ in project.public %}
+        {% set r = project.get_resource(type_) %}
+        {% if r %}
+        <a target="_blank" href="{{ r.link }}"><i class="big {{ icon }} icon link pop"
+            data-content="{{ type_.title() }}"></i></a>
+        {% endif %}
+        {% endif %}
         {% endfor %}
       </p>
     </div>
@@ -109,10 +109,11 @@ Profile
       <p>
         {% for type_, icon in [('report', 'pdf file'), ('poster', 'image file'), ('presentation', 'powerpoint file'),
         ('video', 'video file'), ('git', 'git')] %}
-            {% set r = project.get_resource(type_) %}
-            {% if r %}
-              <a target="_blank" href="{{ r.link }}"><i class="big {{ icon }} icon link pop" data-content="{{ type_.title() }}"></i></a>
-            {% endif %}
+        {% set r = project.get_resource(type_) %}
+        {% if r %}
+        <a target="_blank" href="{{ r.link }}"><i class="big {{ icon }} icon link pop"
+            data-content="{{ type_.title() }}"></i></a>
+        {% endif %}
         {% endfor %}
       </p>
     </div>
@@ -145,15 +146,15 @@ Profile
     {% endif %}
 
   </div> {# end div container #}
-{% endblock %}
+  {% endblock %}
 
-{% block additional_js %}
+  {% block additional_js %}
   {{ super() }}
   <script type="text/javascript">
-    $().ready(function(){
+    $().ready(function () {
       $('.icon.link.pop')
         .popup()
         ;
     });
   </script>
-{% endblock %}
+  {% endblock %}
