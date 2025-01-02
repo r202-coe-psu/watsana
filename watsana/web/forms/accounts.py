@@ -175,6 +175,6 @@ class ProfileForm(FlaskForm):
     last_name = fields.StringField("Last Name", validators=[validators.InputRequired()])
 
     student_id = fields.StringField("Student ID")
-    thai_first_name = fields.StringField("Thai First Name")
-    thai_last_name = fields.StringField("Thai Last Name")
+    first_name_th = fields.StringField("Thai First Name")
+    last_name_th = fields.StringField("Thai Last Name")
     organization = fields.StringField("Organization")

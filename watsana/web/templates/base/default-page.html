@@ -13,10 +13,12 @@
   {% endblock %}
   </header>
 
+  {% if request.path != '/' %}
   <div class="container">
     <main>
       {% block content %}{% endblock content %}
     </main>
+  {% endif %}
     <footer>
       {% include "/base/footer.html" %}
     </footer>
