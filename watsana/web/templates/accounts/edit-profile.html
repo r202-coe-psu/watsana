@@ -19,20 +19,15 @@
     <form method="POST" class="ui form" enctype="multipart/form-data">
       {{ form.csrf_token }}
       <div class="three fields">
-        {{ renderer.render_field(form.title) }}
+        {# {{ renderer.render_field(form.title) }} #}
         {{ renderer.render_field(form.first_name) }}
         {{ renderer.render_field(form.last_name) }}
       </div>
       <div class="three fields">
-        {{ renderer.render_field(form.title_th) }}
+        {# {{ renderer.render_field(form.title_th) }} #}
         {{ renderer.render_field(form.first_name_th) }}
         {{ renderer.render_field(form.last_name_th) }}
       </div>
-      <div class="two fields">
-        {{ renderer.render_field(form.email) }}
-        {{ renderer.render_fileinput(form.pic) }}
-      </div>
-      {{ renderer.render_field(form.biography) }}
       <button name="create" type="submit" class="ui primary button">Change</button>
     </form>
   </div>
