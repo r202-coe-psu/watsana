@@ -7,6 +7,5 @@ __all__ = ["User"]
 
 db = MongoEngine()
 
-
 def init_db(app):
     db.init_app(app)
