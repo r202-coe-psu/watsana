@@ -28,6 +28,12 @@
         {{ renderer.render_field(form.first_name_th) }}
         {{ renderer.render_field(form.last_name_th) }}
       </div>
+      <div class="ui segment">
+        <img src="{{ current_user.get_picture() }}">
+      </div>
+      <div class="one fields">
+        {{ renderer.render_field(form.pic) }}
+      </div>
       <button name="create" type="submit" class="ui primary button">Change</button>
     </form>
   </div>
